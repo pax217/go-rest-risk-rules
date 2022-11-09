@@ -1,0 +1,239 @@
+{
+  "uuid": "6b4c17e4-5097-49f0-a245-074d87abb472",
+  "lastMigration": 19,
+  "name": "Mockserver",
+  "endpointPrefix": "",
+  "latency": 0,
+  "port": 3000,
+  "hostname": "0.0.0.0",
+  "routes": [
+    {
+      "uuid": "f4a2eedf-24f7-469e-96e7-ed5fb4d58148",
+      "documentation": "",
+      "method": "post",
+      "endpoint": "models/inference",
+      "responses": [
+        {
+          "uuid": "4bed13b0-8aab-450a-a13b-b893d78651d1",
+          "body": "0.4",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Omniscore service successfully responds the score calculation",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "body",
+              "modifier": "_id",
+              "value": "615324eb5bc1dea9ce66068f",
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "AND",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        },
+        {
+          "uuid": "7d55bfb7-9d81-4e40-86fe-77585913da69",
+          "body": "{}",
+          "latency": 2000,
+          "statusCode": 500,
+          "label": "error by delay",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "body",
+              "modifier": "_id",
+              "value": "615324eb5bc1dea9ce66068a",
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        },
+        {
+          "uuid": "4312f1ea-3ada-46bf-a335-89971d59f072",
+          "body": "{}",
+          "latency": 0,
+          "statusCode": 400,
+          "label": "Bad request",
+          "headers": [],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "body",
+              "modifier": "_id",
+              "value": "615324eb5bc1dea9ce66068b",
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        }
+      ],
+      "enabled": true,
+      "randomResponse": false,
+      "sequentialResponse": false
+    },
+    {
+      "uuid": "f4a2eedf-24f7-469e-96e7-ed5fb4a58148",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "risk/lists/v1/lists",
+      "responses": [
+        {
+          "uuid": "9299570a-89cf-4a57-9128-8229cd9eddd6",
+          "body": "",
+          "latency": 0,
+          "statusCode": 500,
+          "label": "",
+          "headers": [],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        },
+        {
+          "uuid": "4bed13b0-8aab-450a-a13b-b893d7a651d1",
+          "body": "[\n    {\n        \"company_id\": \"57ed5affdba34df0630071dc\",\n        \"created_at\": \"2021-12-02T20:04:35.00Z\",\n        \"created_by\": \"riesgo@conekta.com\",\n        \"description\": \"migration\",\n        \"decision\": \"A\",\n        \"field\": \"email\",\n        \"is_global\": false,\n        \"is_test\": true,\n        \"rule\": \"email == {{queryParam 'email'}}\",\n        \"type\": \"Whitelist\",\n        \"updated_at\": null,\n        \"updated_by\": null,\n        \"value\": \"{{queryParam 'email'}}\",\n        \"time_to_live\": 0,\n        \"expires\": null\n    }\n]",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Lists service successfully responds with a list of lists",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "email",
+              "value": "susaniux123@hotmail.com",
+              "operator": "equals"
+            },
+            {
+              "target": "query",
+              "modifier": "card_hash",
+              "value": "27603623df3a43698ac6f791448ce4ebdb046fcfbec2ce9f76dd0ce903799444",
+              "operator": "equals"
+            },
+            {
+              "target": "query",
+              "modifier": "phone",
+              "value": "+5215555555555",
+              "operator": "equals"
+            },
+            {
+              "target": "query",
+              "modifier": "company_id",
+              "value": "2",
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        },
+        {
+          "uuid": "49869ce2-0322-4ab8-9249-4e0f47d0536a",
+          "body": "[]",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Lists service successfully responds with a empty lists",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "email",
+              "value": "mail@hotmail.com",
+              "operator": "equals"
+            },
+            {
+              "target": "query",
+              "modifier": "card_hash",
+              "value": "hash-acd7s-34354",
+              "operator": "equals"
+            },
+            {
+              "target": "query",
+              "modifier": "phone",
+              "value": "55-5555-5555",
+              "operator": "equals"
+            },
+            {
+              "target": "query",
+              "modifier": "company_id",
+              "value": "7683457364",
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        }
+      ],
+      "enabled": true,
+      "randomResponse": false,
+      "sequentialResponse": false
+    }
+  ],
+  "proxyMode": false,
+  "proxyHost": "",
+  "proxyRemovePrefix": false,
+  "tlsOptions": {
+    "enabled": false,
+    "type": "CERT",
+    "pfxPath": "",
+    "certPath": "",
+    "keyPath": "",
+    "caPath": "",
+    "passphrase": ""
+  },
+  "cors": true,
+  "headers": [
+    {
+      "key": "Content-Type",
+      "value": "application/json"
+    }
+  ],
+  "proxyReqHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "proxyResHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ]
+}

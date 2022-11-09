@@ -1,0 +1,22 @@
+service_name: risk-rules-jobs
+metadata:
+  team: risk
+  source: go
+type: cronjob
+internal: true
+prefix: /risk-rules
+container_port: 8080
+container_cpu: 256
+container_memory: 512
+service_desired_count: 1
+healthcheck_path: /ping
+dockerfile: scripts/merchant-score-job.dockerfile
+cron_expression: "0 1 * * ? *"
+bucket:
+  - risk-bucket-stg
+environment:
+  - name: "BASE_URL"
+    value: 'https://internal-services.stg.conekta.io'
+secret:
+  - name: "REQUEST_HEADER_TOKEN"
+    from: "/conekta/risk-rules/request_header_token"

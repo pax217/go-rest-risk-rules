@@ -1,0 +1,71 @@
+service_name: risk-rules
+metadata:
+  team: risk
+  source: golang
+type: webservice
+internal: true
+prefix: /risk-rules
+container_port: 8000
+container_cpu: 256
+container_memory: 512
+service_desired_count: 2
+healthcheck_path: /ping
+dockerfile: Dockerfile
+bucket:
+  - risk-bucket-prd
+environment:
+  - name: "ENV"
+    value: "PRD"
+  - name: "PORT"
+    value: "8000"
+  - name: "DD_ENV"
+    value: "PRD"
+  - name: "DD_SERVICE"
+    value: "risk-rules"
+  - name: "DD_VERSION"
+    value: "1.9.0"
+  - name: "DD_TRACE_REPORT_HOSTNAME"
+    value: "true"
+  - name: "KAFKA_CHARGEBACK_TOPIC"
+    value: "risk.chargebacks.created"
+  - name: "KAFKA_CHARGEBACK_GROUP_ID"
+    value: "risk_rules_group1"
+  - name: "KAFKA_CHARGEBACK_ENABLED_AUTH"
+    value: "true"
+  - name: "KAFKA_CHARGEBACK_ENABLED_SSL_CERTIFICATION"
+    value: "true"
+  - name: "KAFKA_CHARGEBACK_MECHANISM"
+    value: "SCRAM-SHA-512"
+  - name: "KAFKA_CHARGEBACK_SECURITY_PROTOCOL"
+    value: "SASL_SSL"
+  - name: "IS_OMNISCORE_ENABLED"
+    value: "true"
+  - name: "OMNISCORE_HOST"
+    value: "https://api.data.conekta.io/risk"
+  - name: "OMNISCORE_TIMEOUT_MILLISECONDS"
+    value: "500"
+  - name: "INTERNAL_SERVICE_HOST"
+    value: "https://internal-services.conekta.com"
+  - name: "INTERNAL_SERVICE_MILLISECONDS"
+    value: "100"
+  - name: "S3_BUCKET"
+    value: "risk-bucket-prd"
+  - name: "AWS_REGION"
+    value: "us-east-1"
+  - name: "S3_PREFIX_FILE"
+    value: "merchant_score"
+  - name: "IS_MERCHANT_SCORE_ENABLED"
+    value: "false"
+secret:
+  - name: "MONGODB_URI"
+    from: "/conekta/risk-rules/mongo/mongo_uri"
+  - name: "MONGODB_DATABASE"
+    from: "/conekta/risk-rules/mongo/mongo_database"
+  - name: "REQUEST_HEADER_TOKEN"
+    from: "/conekta/risk-rules/request_header_token"
+  - name: "KAFKA_CHARGEBACK_BOOSTRAP_SERVERS"
+    from: "/conekta/commons/msk/prd-msk-endpoint-mig"
+  - name: "KAFKA_CHARGEBACK_USER"
+    from: "/conekta/commons/msk/prd-msk-username"
+  - name: "KAFKA_CHARGEBACK_PASSWORD"
+    from: "/conekta/commons/msk/prd-msk-password"

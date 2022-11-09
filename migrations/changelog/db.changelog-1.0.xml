@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="1" author="franklin.carrero">
+        <ext:createIndex collectionName="lists">
+            <ext:keys>
+                { value: 1}
+            </ext:keys>
+            <ext:options>
+                {unique: false, name: "index_lists_value"}
+            </ext:options>
+        </ext:createIndex>
+        <ext:createIndex collectionName="lists">
+            <ext:keys>
+                { company_id: 1}
+            </ext:keys>
+            <ext:options>
+                {unique: false, name: "index_lists_company_id"}
+            </ext:options>
+        </ext:createIndex>
+        <ext:createIndex collectionName="lists">
+            <ext:keys>
+                { is_global: 1}
+            </ext:keys>
+            <ext:options>
+                {unique: false, name: "index_lists_is_global"}
+            </ext:options>
+        </ext:createIndex>
+        <ext:createIndex collectionName="lists">
+            <ext:keys>
+                { type: 1}
+            </ext:keys>
+            <ext:options>
+                {unique: false, name: "index_lists_type"}
+            </ext:options>
+        </ext:createIndex>
+
+        <ext:createIndex collectionName="rules">
+            <ext:keys>
+                { family_id: 1}
+            </ext:keys>
+            <ext:options>
+                {unique: false, name: "index_rules_family_id"}
+            </ext:options>
+        </ext:createIndex>
+        <ext:createIndex collectionName="rules">
+            <ext:keys>
+                { company_id: 1}
+            </ext:keys>
+            <ext:options>
+                {unique: false, name: "index_rules_company_id"}
+            </ext:options>
+        </ext:createIndex>
+        <ext:createIndex collectionName="rules">
+            <ext:keys>
+                { is_global: 1}
+            </ext:keys>
+            <ext:options>
+                {unique: false, name: "index_rules_is_global"}
+            </ext:options>
+        </ext:createIndex>
+
+        <rollback>
+            <ext:dropIndex collectionName="lists">
+                <ext:keys>
+                    { value: 1}
+                </ext:keys>
+                <ext:options>
+                    {name: "index_lists_value"}
+                </ext:options>
+            </ext:dropIndex>
+            <ext:dropIndex collectionName="lists">
+                <ext:keys>
+                    { company_id: 1}
+                </ext:keys>
+                <ext:options>
+                    {name: "index_lists_company_id"}
+                </ext:options>
+            </ext:dropIndex>
+            <ext:dropIndex collectionName="lists">
+                <ext:keys>
+                    { is_global: 1}
+                </ext:keys>
+                <ext:options>
+                    {name: "index_lists_is_global"}
+                </ext:options>
+            </ext:dropIndex>
+            <ext:dropIndex collectionName="lists">
+                <ext:keys>
+                    { type: 1}
+                </ext:keys>
+                <ext:options>
+                    {name: "index_lists_type"}
+                </ext:options>
+            </ext:dropIndex>
+
+            <ext:dropIndex collectionName="rules">
+                <ext:keys>
+                    { family_id: 1}
+                </ext:keys>
+                <ext:options>
+                    {name: "index_rules_family_id"}
+                </ext:options>
+            </ext:dropIndex>
+            <ext:dropIndex collectionName="rules">
+                <ext:keys>
+                    { company_id: 1}
+                </ext:keys>
+                <ext:options>
+                    {name: "index_rules_company_id"}
+                </ext:options>
+            </ext:dropIndex>
+            <ext:dropIndex collectionName="rules">
+                <ext:keys>
+                    { is_global: 1}
+                </ext:keys>
+                <ext:options>
+                    {name: "index_rules_is_global"}
+                </ext:options>
+            </ext:dropIndex>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="2" author="franklin.carrero">
+        <tagDatabase tag="tag2"/>
+    </changeSet>
+</databaseChangeLog>

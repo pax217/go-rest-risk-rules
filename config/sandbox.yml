@@ -1,0 +1,63 @@
+service_name: risk-rules
+metadata:
+  team: risk
+  source: golang
+type: webservice
+internal: true
+prefix: /risk-rules
+container_port: 8000
+container_cpu: 256
+container_memory: 512
+service_desired_count: 1
+healthcheck_path: /ping
+dockerfile: Dockerfile
+environment:
+  - name: "ENV"
+    value: "DEV"
+  - name: "PORT"
+    value: "8000"
+  - name: "DD_ENV"
+    value: "DEV"
+  - name: "DD_SERVICE"
+    value: "risk-rules"
+  - name: "DD_VERSION"
+    value: "1.9.0"
+  - name: "DD_TRACE_REPORT_HOSTNAME"
+    value: "true"
+  - name: "KAFKA_CHARGEBACK_TOPIC"
+    value: "risk.chargebacks.created"
+  - name: "KAFKA_CHARGEBACK_GROUP_ID"
+    value: "risk_rules_group1"
+  - name: "KAFKA_CHARGEBACK_ENABLED_AUTH"
+    value: "true"
+  - name: "KAFKA_CHARGEBACK_ENABLED_SSL_CERTIFICATION"
+    value: "false"
+  - name: "KAFKA_CHARGEBACK_MECHANISM"
+    value: "SCRAM-SHA-512"
+  - name: "KAFKA_CHARGEBACK_SECURITY_PROTOCOL"
+    value: "SASL_SSL"
+  - name: "IS_OMNISCORE_ENABLED"
+    value: "true"
+  - name: "OMNISCORE_HOST"
+    value: "https://api-stg.data.conekta.io/risk"
+  - name: "OMNISCORE_TIMEOUT_MILLISECONDS"
+    value: "5000"
+  - name: "INTERNAL_SERVICE_HOST"
+    value: "https://internal-services.sb.conekta.io"
+  - name: "INTERNAL_SERVICE_MILLISECONDS"
+    value: "3000"
+  - name: "IS_MERCHANT_SCORE_ENABLED"
+    value: "false"
+secret:
+  - name: "MONGODB_URI"
+    from: "/conekta/risk-rules/mongo/mongo_uri"
+  - name: "MONGODB_DATABASE"
+    from: "/conekta/risk-rules/mongo/mongo_database"
+  - name: "REQUEST_HEADER_TOKEN"
+    from: "/conekta/rk/request_header_token"
+  - name: "KAFKA_CHARGEBACK_BOOSTRAP_SERVERS"
+    from: "/conekta/commons/msk/msk-endpoint"
+  - name: "KAFKA_CHARGEBACK_USER"
+    from: "/conekta/commons/msk/msk-user"
+  - name: "KAFKA_CHARGEBACK_PASSWORD"
+    from: "/conekta/commons/msk/msk-pwd"

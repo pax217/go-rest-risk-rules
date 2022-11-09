@@ -1,0 +1,1279 @@
+{
+	"info": {
+		"_postman_id": "860fa3db-6878-4ad7-b560-382393d1188f",
+		"name": "risk-rules",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8679059"
+	},
+	"item": [
+		{
+			"name": "rules",
+			"item": [
+				{
+					"name": "Add Rule",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"decision\": \"D\",\n    \"is_test\": false,\n    \"module\": \"policy_compliance\",\n    \"is_global\": false,\n    \"description\": \"Regla para validar contratos con OXXO\",\n    \"company_id\": null,\n    \"family_id\": null,\n    \"family_company_id\": \"6204339524bc5717b46b19de\",\n    \"is_yellow_flag\": true,\n    \"rules\": [\n        {\n            \"field\": \"amount\",\n            \"operator\": \">\",\n            \"value\": \"800\",\n            \"condition\": \"and\"\n        },\n        {\n            \"field\": \"amount\",\n            \"operator\": \"<\",\n            \"value\": \"1000\",\n            \"condition\": \"or\"\n        }\n    ],\n    \"author\": \"carlos.maldonado@conekta.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/rules",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"rules"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Rule",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/rules/610c4a0334eb0eba6ba14958",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"rules",
+								"610c4a0334eb0eba6ba14958"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Rule",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"author\": \"{{$randomEmail}}\",\n    \"is_test\": true,\n    \"module\": \"policy_compliance\",\n    \"is_global\": true,\n    \"description\": \"Regla para validar rangos válios de pago con OXXO\",\n    \"company_id\": null,\n    \"family_id\": null,\n    \"rules\": [\n        {\n            \"field\": \"amount\",\n            \"operator\": \">\",\n            \"value\": \"8\",\n            \"condition\": \"and\"\n        },\n        {\n            \"field\": \"amount\",\n            \"operator\": \"<\",\n            \"value\": \"5552\",\n            \"condition\": \"or\"\n        }\n    ],\n    \"decision\": \"A\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/rules/629ec0fcc1f72778eff48792",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"rules",
+								"629ec0fcc1f72778eff48792"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/rules?id=62730f1c1dacb6e2417234da&page=1&size=5",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"rules"
+							],
+							"query": [
+								{
+									"key": "company_id",
+									"value": "611d1f92bebdf692f893db2a",
+									"disabled": true
+								},
+								{
+									"key": "id",
+									"value": "62730f1c1dacb6e2417234da"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								},
+								{
+									"key": "family_id",
+									"value": "618946f92287622c9b7b8b7c",
+									"disabled": true
+								},
+								{
+									"key": "family_company_id",
+									"value": "6204339524bc5717b46b19de",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Rule with payment_method",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"is_test\": false,\n    \"module\": \"policy_compliance\",\n    \"is_global\": false,\n    \"description\": \"Regla para negar tarjetas de proveedor clon\",\n    \"company_id\": \"60ad5c44926c8400016cbfdc\",\n    \"rules\": [\n        {\n            \"field\": \"payment_method.issuer\",\n            \"operator\": \"eq\",\n            \"value\": \"visaa\",\n            \"condition\": \"and\"\n        }\n    ],\n    \"author\": \"carlos.maldonado@conekta.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/rules",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"rules"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Rule Aggregation",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"is_test\": false,\n    \"module\": \"policy_compliance\",\n    \"is_global\": false,\n    \"description\": \"Regla para evitar compras masivas a un merchant\",\n    \"company_id\": \"60ad5c44926c8400016cbfdc\",\n    \"rules\": [\n        {\n            \"field\": \"aggregation.payer_company.charge.m180.count\",\n            \"operator\": \">\",\n            \"value\": \"100\",\n            \"condition\": \"and\"\n        }\n    ],\n    \"author\": \"diana.cuartas@conekta.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/rules",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"rules"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "charges",
+			"item": [
+				{
+					"name": "evaluate rules",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"_id\": \"60902f89bb312295544b9a01\",\n    \"amount\": 801,\n    \"device_fingerprint\": \"7uG97A4VkKWdZW5gEBmYZe3m7VQM46oy\",\n    \"order_id\": \"289225303828\",\n    \"status\": \"pending_payment\",\n    \"company_id\": \"6204339524bc5717b46b19de\",\n    \"company_mcc\": \"1155\",\n    \"monthly_installments\": 2,\n    \"is_yellow_flag\": true,\n    \"details\": {\n        \"email\": \"Cristopher29_1@gmail.com\",\n        \"ip_address\": \"127.0.0.1\",\n        \"phone\": \"+52477266334212\",\n        \"name\": \"de M12\"\n    },\n    \"payment_method\": {\n        \"Bin_number\": \"7uG97A4Vk34KWdZW5gEBmYZe\",\n        \"brand\": \"visa\",\n        \"card_type\": \"credit\",\n        \"card_hash\": \"cGfNEDJZjyj12121\",\n        \"country\": \"US\",\n        \"issuer\": \"AMEX\"\n    },\n    \"aggregation\": {\n        \"payer\": {\n            \"charge\": {\n                \"d120\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"h12\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"d15\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"h1\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"m1\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"h24\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"d2\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"h2\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"d30\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"d3\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"d4\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"m5\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"d60\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"d7\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                }\n            },\n            \"id\": \"DCBIC@yahoo.com\"\n        },\n        \"payer_company\": {\n            \"charge\": {\n                \"d120\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"h12\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"d15\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"h1\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"m1\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"h24\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"d2\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"h2\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"d30\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"d3\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"d4\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"m5\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"d60\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"d7\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                }\n            },\n            \"id\": \"ACBC@conekta.com#4c4cbb49-227b-421f-b558-6ba673e1c5c1\"\n        },\n        \"bin_number\":{\n            \"charge\":{\n                \"d120\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"h12\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"d15\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"h1\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"m1\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"h24\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"d2\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"h2\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"d30\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"d3\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"d4\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"m5\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"d60\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"d7\":{\n                    \"count\":0,\n                    \"sum\":0\n                }\n            },\n            \"id\":\"3273465\"\n        },\n        \"card_hash\":{\n            \"charge\":{\n                \"d120\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"h12\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"d15\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"h1\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"m1\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"h24\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"d2\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"h2\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"d30\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"d3\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"d4\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"m5\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"d60\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"d7\":{\n                    \"count\":0,\n                    \"sum\":0\n                }\n            },\n            \"id\":\"6ba673e1c5c1\"\n        }\n    },\n    \"market_segment\": \"high processing SMB\",\n    \"console\":[\n        {\n            \"name\": \"YellowFlag\",\n            \"priority\": [\"UN\"]\n        },\n        {\n            \"name\": \"CompanyRules\",\n            \"priority\": [\"A\",\"D\",\"UN\"]\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/charges/evaluate_rules",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"charges",
+								"evaluate_rules"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "evaluate",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"_id\": \"60902f89bb312295544b9a01\",\n    \"amount\": 10,\n    \"device_fingerprint\": \"7uG97A4VkKWdZW5gEBmYZe3m7VQM46oy\",\n    \"order_id\": \"289225303828\",\n    \"status\": \"pending_payment\",\n    \"company_id\": \"60ad5c44926c8400016cbfdc\",\n    \"company_mcc\": \"115511\",\n    \"monthly_installments\": 2,\n    \"details\": {\n        \"email\": \"Cristopher29_1@gmail.com\",\n        \"ip_address\": \"127.0.0.1\",\n        \"phone\": \"+52477266334212\",\n        \"name\": \"de M12\"\n    },\n    \"payment_method\": {\n        \"Bin_number\": \"7uG97A4Vk34KWdZW5gEBmYZe\",\n        \"brand\": \"visa\",\n        \"card_type\": \"credit\",\n        \"card_hash\": \"cGfNEDJZjyj12121\",\n        \"country\": \"US\",\n        \"issuer\": \"AMEX\"\n    },\n    \"aggregation\": {\n        \"payer\": {\n            \"charge\": {\n                \"d120\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"h12\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"d15\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"h1\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"m1\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"h24\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"d2\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"h2\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"d30\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"d3\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"d4\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"m5\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"d60\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"d7\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                }\n            },\n            \"id\": \"DCBIC@yahoo.com\"\n        },\n        \"payer_company\": {\n            \"charge\": {\n                \"d120\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"h12\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"d15\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"h1\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"m1\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"h24\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"d2\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"h2\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"d30\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"d3\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"d4\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"m5\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"d60\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                },\n                \"d7\": {\n                    \"count\": 0,\n                    \"sum\": 0\n                }\n            },\n            \"id\": \"ACBC@conekta.com#4c4cbb49-227b-421f-b558-6ba673e1c5c1\"\n        },\n        \"bin_number\":{\n            \"charge\":{\n                \"d120\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"h12\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"d15\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"h1\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"m1\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"h24\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"d2\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"h2\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"d30\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"d3\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"d4\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"m5\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"d60\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"d7\":{\n                    \"count\":0,\n                    \"sum\":0\n                }\n            },\n            \"id\":\"3273465\"\n        },\n        \"card_hash\":{\n            \"charge\":{\n                \"d120\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"h12\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"d15\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"h1\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"m1\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"h24\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"d2\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"h2\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"d30\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"d3\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"d4\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"m5\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"d60\":{\n                    \"count\":0,\n                    \"sum\":0\n                },\n                \"d7\":{\n                    \"count\":0,\n                    \"sum\":0\n                }\n            },\n            \"id\":\"6ba673e1c5c1\"\n        }\n    },\n    \"market_segment\": \"high processing SMB\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/charges/evaluate",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"charges",
+								"evaluate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get evaluation result",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/charges/evaluations/:id",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"charges",
+								"evaluations",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "60902f89bb312295544b9a01"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get evaluation rules",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/charges/evaluations_rules/:id",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"charges",
+								"evaluations_rules",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "60902f89bb312295544b9a01"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "modules",
+			"item": [
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/modules",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"modules"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add module",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"author\": \"carlos.maldonado@conekta.com\",\r\n    \"name\": \"policy_compliance\",\r\n    \"description\": \"reglas de politicas conekta\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/modules",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"modules"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update module",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"author\": \"carlos.maldonado@conekta.com\",\r\n    \"name\": \"policy_compliance_updated\",\r\n    \"description\": \"no se puede pagar drogas updated\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/modules/611d316e9bb480b8fcdc13c2",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"modules",
+								"611d316e9bb480b8fcdc13c2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/modules/611d316e9bb480b8fcdc13c2",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"modules",
+								"611d316e9bb480b8fcdc13c2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "conditions",
+			"item": [
+				{
+					"name": "Get Paginated",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/conditions?page=1&size=5&id=612d5dad0cc7898407024e6b",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"conditions"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								},
+								{
+									"key": "id",
+									"value": "612d5dad0cc7898407024e6b"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add condition",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"author\": \"santiago.ceron@conekta.com\",\r\n    \"name\": \"and\",\r\n    \"description\": \"debe cumplir ambas reglas\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/conditions",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"conditions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"author\": \"santiago.ceron@conekta.com\",\n    \"name\": \"and\",\n    \"description\": \"debe cumplir ambas reglas\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/conditions/6127bb130700114f726903f8",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"conditions",
+								"6127bb130700114f726903f8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/conditions/6127bb130700114f726903f8",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"conditions",
+								"6127bb130700114f726903f8"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "operators",
+			"item": [
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/operators?page=1&size=5",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"operators"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								},
+								{
+									"key": "Id",
+									"value": "61393491305f202b417b1ee4",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "==",
+									"disabled": true
+								},
+								{
+									"key": "type",
+									"value": "number",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"author\": \"carlos.maldonado@conekta.com\",\r\n    \"name\": \"==\",\r\n    \"description\": \"indica la igualdad de 2 números\",\r\n    \"type\": \"number\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/operators",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"operators"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"type\": \"number\",\n    \"author\": \"carlos.maldonado@conekta.com\",\n    \"name\": \">\",\n    \"description\": \"indica la desigualdad matemática, comparando si un número es mayor que otro\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/operators/618c693b02e9c5cf7b6aa43c",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"operators",
+								"618c693b02e9c5cf7b6aa43c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/operators/611571bd65efb755fa188a92",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"operators",
+								"611571bd65efb755fa188a92"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "fields",
+			"item": [
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/fields?page=1&size=5",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"fields"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"author\": \"santiago.ceron@conekta.com\",\r\n    \"name\": \"aggregation.payer_company.charge.h2880.sum\",\r\n    \"type\": \"number\",\r\n    \"description\": \"Cantidad de dinero en transacciones en los últimos 3 meses, asociando comprador y merchant\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/fields",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"fields"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"author\": \"santiago.ceron@conekta.com\",\n    \"name\": \"aggregation.payer.charge.h1440.count\",\n    \"type\": \"string\",\n    \"description\": \" Cantidad de cargos en los últimos 2 meses\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/fields/61492f34b76064b3ccfdfacc",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"fields",
+								"61492f34b76064b3ccfdfacc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/fields/611d329b60318f4eed3b6543",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"fields",
+								"611d329b60318f4eed3b6543"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "families",
+			"item": [
+				{
+					"name": "Add",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Miscellaneous and Specialty Retail Stores\",\n    \"mccs\": [\"1345\",\"1234\"],\n    \"author\": \"santiago.ceron@conekta.com\",\n    \"excluded_companies\" :[]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/families",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"families"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Paginated",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/families?page=1&size=5",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"families"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								},
+								{
+									"key": "id",
+									"value": "617c7516b201155864dd6150",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "Fast Food Restaurants",
+									"disabled": true
+								},
+								{
+									"key": "mccs",
+									"value": "2222",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Service Stations\",\n    \"mccs\": [\n        \"5541\",\n        \"1111\",\n        \"2222\"\n    ],\n    \"author\": \"santiago.ceron@conekta.com\",\n    \"excluded_companies\": []\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/families/61685179378d2ad5c3405bc5",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"families",
+								"61685179378d2ad5c3405bc5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/families/611d316e9bb480b8fcdc13c2",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"families",
+								"611d316e9bb480b8fcdc13c2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "family companies",
+			"item": [
+				{
+					"name": "Add",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Tiendas Deportivas\",\n    \"company_ids\": [\"61e4dd6da5997ad4d9e76945\",\"61e4dd7320fbfc5f0849fba5\"],\n    \"author\": \"carlos.maldonado@conekta.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/family_companies",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"family_companies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Paginated",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/family_companies?page=1&size=5",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"family_companies"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/family_companies/61e8e1c00a5f52c046092c82",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"family_companies",
+								"61e8e1c00a5f52c046092c82"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Tiendas Electrónica\",\n    \"company_ids\": [\"61e4dd6da5997ad4d9e76945\",\"61eb21792e341c54221062b4\",\"61eb217e66524deb95ad5143\"],\n    \"author\": \"santiago.ceron@conekta.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/family_companies/61eb25270c4fced6a867c9e9",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"family_companies",
+								"61eb25270c4fced6a867c9e9"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Merchant Score",
+			"item": [
+				{
+					"name": "Read and save",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Request-Risk",
+								"value": "{{XRequestRisk}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{server}}/risk-rules/v1/merchants_score",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"risk-rules",
+								"v1",
+								"merchants_score"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ping",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server}}/ping",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"ping"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

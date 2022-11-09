@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="3" author="franklin.carrero">
+
+        <ext:createIndex collectionName="rules">
+            <ext:keys>
+                { family_company_id: 1}
+            </ext:keys>
+            <ext:options>
+                {unique: false, name: "index_rules_family_company_id"}
+            </ext:options>
+        </ext:createIndex>
+
+        <rollback>
+            <ext:dropIndex collectionName="rules">
+                <ext:keys>
+                    { family_company_id: 1}
+                </ext:keys>
+                <ext:options>
+                    {name: "index_rules_family_company_id"}
+                </ext:options>
+            </ext:dropIndex>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="4" author="franklin.carrero">
+        <tagDatabase tag="tag4"/>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,155 @@
+services:
+  httpserver:
+    container_name: risk-rules-server
+    ports:
+      - "8000:8000"
+    image: risk-rules:latest
+    command: [ "./wait-for-it.sh", "kafka" , "19094" ]
+    volumes:
+      - ./wait-for-it.sh:/wait-for-it.sh:ro
+    depends_on:
+      - mongo
+      - kafka
+    networks:
+      - backend
+    environment:
+      WAIT_HOSTS: mongo:27018
+      MONGODB_URI: mongodb://mongo:27018
+      ENV: local
+      REQUEST_HEADER_TOKEN: 123456789
+      KAFKA_CHARGEBACK_PASSWORD: password
+      KAFKA_CHARGEBACK_USER: metricsreporter
+      KAFKA_CHARGEBACK_BOOSTRAP_SERVERS: "kafka:19094"
+      KAFKA_CHARGEBACK_ENABLED_SSL_CERTIFICATION_VERIFICATION: "false"
+      KAFKA_CHARGEBACK_ENABLED_AUTH: "true"
+      DD_TRACE_ENABLED: "false"
+      KAFKA_CHARGEBACK_MECHANISM: SCRAM-SHA-512
+      KAFKA_CHARGEBACK_TOPIC: risk.chargebacks.created
+      IS_OMNISCORE_ENABLED: "true"
+      OMNISCORE_HOST: http://mockserver:3000
+      INTERNAL_SERVICE_HOST: http://mockserver:3000
+      S3_BUCKET: risk-bucket-stg
+
+  mongo:
+    networks:
+      - backend
+    container_name: risk-rules-mongo
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_DATABASE: rules
+    command: mongod --port 27018 --setParameter ttlMonitorSleepSecs=1
+    ports:
+      - "27018:27018"
+
+  zookeeper-add-kafka-users:
+    image: confluentinc/cp-kafka:6.2.2
+    container_name: "zookeeper-add-kafka-users"
+    networks:
+      - backend
+    depends_on:
+      - zookeeper-1
+    command: "bash -c 'echo Waiting for Zookeeper to be ready... && \
+                            cub zk-ready zookeeper-1:22181 120 && \
+                            kafka-configs --zookeeper zookeeper-1:22181 --alter --add-config 'SCRAM-SHA-512=[iterations=4096,password=password]' --entity-type users --entity-name metricsreporter && \
+                            kafka-configs --zookeeper zookeeper-1:22181 --alter --add-config 'SCRAM-SHA-512=[iterations=4096,password=password]' --entity-type users --entity-name kafkaclient && \
+                            kafka-configs --zookeeper zookeeper-1:22181 --alter --add-config 'SCRAM-SHA-512=[iterations=4096,password=password]' --entity-type users --entity-name kafkabroker '"
+    environment:
+      DEFAULT_TOPIC: risk.chargebacks.created
+      KAFKA_BROKER_ID: ignored
+      KAFKA_ZOOKEEPER_CONNECT: ignored
+      KAFKA_OPTS: -Djava.security.auth.login.config=/etc/kafka/secrets/zookeeper_client_jaas.conf
+    volumes:
+      - ./files/zookeeper_client_jaas.conf:/etc/kafka/secrets/zookeeper_client_jaas.conf
+
+  zookeeper-1:
+    image: confluentinc/cp-zookeeper:6.2.2
+    hostname: zookeeper-1
+    container_name: zookeeper-1
+    networks:
+      - backend
+    ports:
+      - "22181:22181"
+    environment:
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: 22181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_SERVERS: zookeeper-1:22888:23888
+      KAFKA_OPTS: -Djava.security.auth.login.config=/etc/kafka/secrets/zookeeper_server_jaas.conf
+        -Dquorum.auth.enableSasl=true
+        -Dquorum.auth.learnerRequireSasl=true
+        -Dquorum.auth.serverRequireSasl=true
+        -Dquorum.cnxn.threads.size=20
+        -Dzookeeper.authProvider.1=org.apache.zookeeper.server.auth.SASLAuthenticationProvider
+        -Dzookeeper.authProvider.2=org.apache.zookeeper.server.auth.DigestAuthenticationProvider
+        -DjaasLoginRenew=3600000
+        -DrequireClientAuthScheme=sasl
+        -Dquorum.auth.learner.loginContext=QuorumLearner
+        -Dquorum.auth.server.loginContext=QuorumServer
+    volumes:
+      - ./files/zookeeper_server_jaas.conf:/etc/kafka/secrets/zookeeper_server_jaas.conf
+
+  kafka:
+    image: confluentinc/cp-kafka:6.2.2
+    hostname: kafka
+    networks:
+      - backend
+    ports:
+      - "19093:19093"
+      - "19094:19094"
+    depends_on:
+      - zookeeper-1
+    environment:
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:22181
+      KAFKA_ADVERTISED_LISTENERS: SSL://kafka:19093,SASL_SSL://kafka:19094
+      KAFKA_SSL_KEYSTORE_FILENAME: kafka.keystore.jks
+      KAFKA_SSL_KEYSTORE_CREDENTIALS: keystore_creds
+      KAFKA_SSL_KEY_CREDENTIALS: keystore_creds
+      KAFKA_SSL_TRUSTSTORE_FILENAME: kafka.truststore.jks
+      KAFKA_SSL_TRUSTSTORE_CREDENTIALS: truststore_creds
+      KAFKA_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM: " "
+      KAFKA_SSL_CLIENT_AUTH: "requested"
+      KAFKA_MIN_INSYNC_REPLICAS: 1
+      KAFKA_SASL_ENABLED_MECHANISMS: SCRAM-SHA-512
+      KAFKA_SECURITY_INTER_BROKER_PROTOCOL: SASL_SSL
+      KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: SCRAM-SHA-512
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_OFFSETS_RETENTION_MINUTES: 172800
+      KAFKA_LOG4J_LOGGERS: "kafka.authorizer.logger=INFO,kafka.controller=INFO"
+      KAFKA_LOG4J_ROOT_LOGLEVEL: "INFO"
+      KAFKA_SUPER_USERS: User:metricsreporter;User:kafkabroker;User:kafkaclient
+      KAFKA_ZOOKEEPER_SASL_ENABLED: "true"
+      KAFKA_ZOOKEEPER_SET_ACL: "true"
+      KAFKA_AUTHORIZER_CLASS_NAME: kafka.security.auth.SimpleAclAuthorizer
+      KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "false"
+      KAFKA_OPTS: -Dzookeeper.sasl.client=true
+        -Dzookeeper.sasl.clientconfig=Client
+        -Dssl.endpoint.identification.algorithm=
+        -Djava.security.auth.login.config=/etc/kafka/secrets/conf/kafka_server_jaas.conf
+    volumes:
+      - ./files/kafka_server_jaas.conf:/etc/kafka/secrets/kafka_server_jaas.conf
+      - ./files/kafka_server_jaas.conf:/etc/kafka/secrets/conf/kafka_server_jaas.conf
+      - ./files/certs/kafka.keystore.jks:/etc/kafka/secrets/kafka.keystore.jks
+      - ./files/certs/kafka.truststore.jks:/etc/kafka/secrets/kafka.truststore.jks
+      - ./files/certs/keystore_creds:/etc/kafka/secrets/keystore_creds
+      - ./files/certs/truststore_creds:/etc/kafka/secrets/truststore_creds
+      - ./files/certs/keystore_creds:/etc/kafka/secrets/conf/keystore_creds
+      - ./files/certs/truststore_creds:/etc/kafka/secrets/conf/truststore_creds
+
+  mockserver:
+    image: mockoon/cli:latest
+    networks:
+      - backend
+    command: "-d data -p 3000"
+    environment:
+      d: data
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./files/mockserver.json:/data:ro
+
+networks:
+  backend:
